@@ -14,7 +14,57 @@ namespace TestGeneratorLib
     {
         public FileElement GetFileElement(string code)
         {
+            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var classes = new List<ClassElement>();
+            foreach (ClassDeclarationSyntax classDeclaration in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
+            {
+                classes.Add(GetClassElement(classDeclaration));
+            }
 
+            return new FileElement(classes);
+        }
+
+        private MethodElement GetMethodElement(MethodDeclarationSyntax method)
+        {
+            List<string> parameterTypes = new List<string>();
+            List<string> parameters = new List<string>();
+            foreach (var parameter in method.ParameterList.Parameters) 
+            {
+                parameterTypes.Add(parameter.Type.ToString());
+                parameters.Add(parameter.Identifier.Text);
+            }
+
+            return new MethodElement(method.Identifier.ValueText, method.ReturnType.ToString(), parameterTypes, parameters);
+        }
+
+        private ConstructorElement GetConstructorElement(ConstructorDeclarationSyntax constructor)
+        {
+            List<string> parameterTypes = new List<string>();
+            List<string> parameters = new List<string>();
+            foreach (var parameter in constructor.ParameterList.Parameters)
+            {
+                parameterTypes.Add(parameter.Type.ToString());
+                parameters.Add(parameter.Identifier.Text);
+            }
+
+            return new ConstructorElement(constructor.Identifier.ValueText, parameterTypes, parameters);
+        }
+
+        private ClassElement GetClassElement(ClassDeclarationSyntax classDeclaration)
+        {
+            var methods = new List<MethodElement>();
+            foreach (var method in classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>().Where((methodDeclaration) => methodDeclaration.Modifiers.Any((modifier) => modifier.IsKind(SyntaxKind.PublicKeyword))))
+            {
+                methods.Add(GetMethodElement(method));
+            }
+
+            var constructors = new List<ConstructorElement>();
+            foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().Where((constructorDeclaration) => constructorDeclaration.Modifiers.Any((modifier) => modifier.IsKind(SyntaxKind.PublicKeyword))))
+            {
+                constructors.Add(GetConstructorElement(constructor));
+            }
+
+            return new ClassElement(classDeclaration.Identifier.ValueText, methods, constructors);
         }
     }
 }
