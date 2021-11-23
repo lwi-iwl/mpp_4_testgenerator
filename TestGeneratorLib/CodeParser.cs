@@ -26,28 +26,24 @@ namespace TestGeneratorLib
 
         private MethodElement GetMethodElement(MethodDeclarationSyntax method)
         {
-            List<string> parameterTypes = new List<string>();
-            List<string> parameters = new List<string>();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
             foreach (var parameter in method.ParameterList.Parameters) 
             {
-                parameterTypes.Add(parameter.Type.ToString());
-                parameters.Add(parameter.Identifier.Text);
+                parameters.Add(parameter.Identifier.Text, parameter.Type.ToString());
             }
 
-            return new MethodElement(method.Identifier.ValueText, method.ReturnType.ToString(), parameterTypes, parameters);
+            return new MethodElement(method.Identifier.ValueText, method.ReturnType.ToString(), parameters);
         }
 
         private ConstructorElement GetConstructorElement(ConstructorDeclarationSyntax constructor)
         {
-            List<string> parameterTypes = new List<string>();
-            List<string> parameters = new List<string>();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
             foreach (var parameter in constructor.ParameterList.Parameters)
             {
-                parameterTypes.Add(parameter.Type.ToString());
-                parameters.Add(parameter.Identifier.Text);
+                parameters.Add(parameter.Identifier.Text, parameter.Type.ToString());
             }
 
-            return new ConstructorElement(constructor.Identifier.ValueText, parameterTypes, parameters);
+            return new ConstructorElement(constructor.Identifier.ValueText, parameters);
         }
 
         private ClassElement GetClassElement(ClassDeclarationSyntax classDeclaration)

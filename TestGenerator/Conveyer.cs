@@ -29,7 +29,7 @@ namespace TestGenerator
                 async sourceCode =>
                 {
                     var fileInfo = await Task.Run(()=> new CodeParser().GetFileElement(sourceCode));
-                    return await Task.Run(()=> TestsGenerator.GenerateTests(fileInfo));
+                    return await Task.Run(()=> new TestsGenerator().GenerateTests(fileInfo));
                 },
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = pipelineLimit }
             );
