@@ -53,7 +53,7 @@ namespace TestGeneratorLib
                     .Attributes.Add(SyntaxFactory.Attribute(SyntaxFactory.ParseName("TestFixture")))));
         }
 
-        private ConstructorElement GetConstructor(ClassElement classElement)
+        public ConstructorElement GetConstructor(ClassElement classElement)
         {
             ConstructorElement  constructor = classElement.Constructors[0];
             foreach (var temp in classElement.Constructors)
@@ -67,7 +67,7 @@ namespace TestGeneratorLib
             return constructor;
         }
 
-        private Dictionary<string, string> GetInterfaces(Dictionary<string, string> parameters)
+        public Dictionary<string, string> GetInterfaces(Dictionary<string, string> parameters)
         {
             Dictionary<string, string> interfaces = new Dictionary<string, string>();
             foreach (var parameter in parameters)
@@ -95,7 +95,7 @@ namespace TestGeneratorLib
             return interfaces;
         }
 
-        private List<FieldDeclarationSyntax> GetConstructorFields(Dictionary<string, string> interfaces)
+        public List<FieldDeclarationSyntax> GetConstructorFields(Dictionary<string, string> interfaces)
         {
             List<FieldDeclarationSyntax> fields = new List<FieldDeclarationSyntax>();
             foreach (var custom in interfaces)
@@ -121,7 +121,7 @@ namespace TestGeneratorLib
             return fields;
         }
 
-        private List<MethodDeclarationSyntax> GetMethods(ConstructorElement constructor, ClassElement classElement)
+        public List<MethodDeclarationSyntax> GetMethods(ConstructorElement constructor, ClassElement classElement)
         {
             List<MethodDeclarationSyntax> methods = new List<MethodDeclarationSyntax>();
             methods.Add(GetSetUpMethod(constructor, classElement.ClassName));

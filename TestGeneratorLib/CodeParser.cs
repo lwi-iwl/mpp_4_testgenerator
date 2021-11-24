@@ -57,6 +57,7 @@ namespace TestGeneratorLib
             var constructors = new List<ConstructorElement>();
             foreach (var constructor in classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().Where((constructorDeclaration) => constructorDeclaration.Modifiers.Any((modifier) => modifier.IsKind(SyntaxKind.PublicKeyword))))
             {
+                Console.WriteLine(constructor.Identifier);
                 constructors.Add(GetConstructorElement(constructor));
             }
 
